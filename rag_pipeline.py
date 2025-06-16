@@ -40,14 +40,36 @@ class RAGChatbot:
         :param query: User query string.
         :param top_k: Number of relevant snippets to retrieve.
         """
-        query_embedding = embedding_model.encode(query, convert_to_tensor=True)
+        # Ensure that the index contains both documents and embeddings
+        if "documents" not in self.index or "embeddings" not in self.index:
+            raise ValueError("Index must contain both 'documents' and 'embeddings'.")
+
         docs = self.index["documents"]
+        embeddings = self.index["embeddings"]
+
+        # Ensure embeddings and docs have the same length
+        if len(docs) != len(embeddings):
+            raise ValueError(
+                f"Mismatch between number of documents ({len(docs)}) "
+                f"and embeddings ({len(embeddings)})."
+            )
+
+        # Handle empty documents list
+        if not docs:
+            return []
+
+        # Encode the query
+        query_embedding = embedding_model.encode(query, convert_to_tensor=True)
+        doc_embeddings = torch.tensor(embeddings)
+
+        # Handle case where top_k is greater than the number of documents
+        effective_k = min(top_k, len(docs))
 
         # Calculate similarity scores
-        doc_embeddings = torch.tensor(self.index["embeddings"])
         similarities = util.pytorch_cos_sim(query_embedding, doc_embeddings)[0]
-        top_results = torch.topk(similarities, k=top_k)
+        top_results = torch.topk(similarities, k=effective_k)
 
+        # Collect results
         results = []
         for score, idx in zip(top_results[0], top_results[1]):
             results.append((docs[idx], float(score)))
