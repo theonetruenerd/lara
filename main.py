@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-chatbot = RAGChatbot("rag_data\\hamilton.json")
+chatbot = RAGChatbot("rag_data\\raw_data\\hamilton2.json")
 
 class ChatRequest(BaseModel):
     message: str
@@ -23,3 +23,8 @@ class ChatRequest(BaseModel):
 async def get_chat_response(request: ChatRequest):
     response = chatbot.handle_query(request.message)
     return {"response": response}
+
+@app.post("/clear-history")
+async def clear_history():
+    chatbot.clear_history()
+    return {"message": "History cleared successfully."}

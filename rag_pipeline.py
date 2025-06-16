@@ -21,6 +21,7 @@ class RAGChatbot:
         :param index_path: Path to JSON file containing the index of documents.
         """
         self.index = self.load_index(index_path)
+        self.conversation_history = []
 
     @staticmethod
     def load_index(index_path: str):
@@ -75,24 +76,38 @@ class RAGChatbot:
             results.append((docs[idx], float(score)))
         return results
 
-    @staticmethod
-    def generate_response(query: str, context: str):
+    def generate_response(self, query: str, context: str):
         """
         Generates the response using OpenAI API given the query and relevant context.
         :param query: The user's query.
         :param context: The relevant context retrieved.
         """
         prompt = f"You are an expert assistant with deep knowledge of liquid handling instruments. Use the following context to answer the user's query as precisely as possible:\n\n{context}\n\nQuery: {query}\n\nAnswer:"
+        messages = [
+            {"role": "system", "content": "You are a helpful and knowledgeable assistant."},
+            {"role": "user", "content": prompt}
+        ]
+
+        for msg in self.conversation_history:
+            messages.append({"role":msg["role"],"content":msg["content"]})
+
+        messages.append({"role":"user","content":query})
 
         try:
             response = client.chat.completions.create(
                 model="mistralai/devstral-small:free",
-                messages=[
-                    {"role": "system", "content": "You are a helpful and knowledgeable assistant."},
-                    {"role": "user", "content": prompt}
-                ]
+                messages=messages
             )
-            return response.choices[0].message.content
+            response_content = response.choices[0].message.content
+            self.conversation_history.append({"role":"user","content":query})
+            self.conversation_history.append({"role":"assistant","content":response_content})
+
+            max_history = 10
+            if len(self.conversation_history) > max_history:
+                self.conversation_history = self.conversation_history[-max_history:]
+
+            return response_content
+
         except Exception as e:
             print(f"Error generating response: {e}")
             return "I'm sorry, I encountered an issue generating the response."
@@ -110,6 +125,14 @@ class RAGChatbot:
         response = self.generate_response(query, context)
         return response
 
+    def clear_history(self):
+        """
+        Clears the conversation history.
+        :return:
+        """
+        self.conversation_history = []
+        return "Conversation history cleared."
+
 
 # Utility functions
 def build_index(documents: List[str], output_path: str):
@@ -126,6 +149,7 @@ def build_index(documents: List[str], output_path: str):
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
     print(f"Index created and saved to {output_path}")
+
 
 
 if __name__ == "__main__":
