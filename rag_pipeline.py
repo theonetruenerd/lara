@@ -105,7 +105,7 @@ class RAGChatbot:
 
         return results
 
-    def generate_response(self, query: str, context: str):
+    def generate_response(self, query: str, context: str, model: str = "meta-llama/llama-3.3-8b-instruct:free"):
         """
         Generates the response using OpenAI API given the query and relevant context.
         :param query: The user's query.
@@ -124,7 +124,7 @@ class RAGChatbot:
 
         try:
             response = client.chat.completions.create(
-                model="mistralai/devstral-small:free",
+                model=model,
                 messages=messages
             )
             response_content = response.choices[0].message.content
@@ -149,6 +149,15 @@ class RAGChatbot:
         # Step 1: Retrieve relevant context
         relevant_docs = self.retrieve_context(query)
         context = "\n".join([f"Document {i + 1}: {doc[0]}" for i, doc in enumerate(relevant_docs)])
+
+        models_to_try = ["mistralai/devstral-small:free",
+                         "moonshotai/kimi-dev-72b:free",
+                         "google/gemma-3n-e4b-it:free",
+                         "meta-llama/llama-3.3-8b-instruct:free",
+                         "microsoft/phi-4-reasoning-plus:free",
+                         "thudm/glm-z1-32b:free",
+                         "agentica-org/deepcoder-14b-preview:free",
+                         "nvidia/llama-3.1-nemotron-ultra-253b-v1:free"]
 
         # Step 2: Generate response
         response = self.generate_response(query, context)
