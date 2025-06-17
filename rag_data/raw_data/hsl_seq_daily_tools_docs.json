@@ -1,0 +1,169 @@
+[
+  {
+    "type": "library",
+    "metadata": {
+      "title": "HSL_SeqDailyTools",
+      "description": "The HSL_SeqDailyTools library adds four functions aimed at making some parts of sequence handling slightly easier.",
+      "tags": [
+        "library"
+      ],
+      "documentation_url": "https://venuslibrarydocumentation.readthedocs.io/en/latest/HSL_SeqDailyTools.html"
+    },
+    "details": {
+      "library": {
+        "name": "HSL_SeqDailyTools",
+        "url": "https://github.com/theonetruenerd/VenusPackages/blob/main/HSL_SeqDailyTools.pkg",
+        "description": "The HSL_SeqDailyTools library adds four functions aimed at making some parts of sequence handling slightly easier.",
+        "functions": [
+          "CopyPlatePattern96ToTipRack",
+          "CopyPlatePatternToPlate",
+          "GetNumberOfPositionsLeft",
+          "SeqEasyEdit"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "metadata": {
+      "title": "CopyPlatePattern96ToTipRack",
+      "description": "Copies the sequence pattern on a 96 well plate and applies it to a tip rack. It is used to ensure that the 96 head only picks up tips in the wells that the plate is going to be interacting with.",
+      "tags": [
+        "function"
+      ],
+      "documentation_url": "https://venuslibrarydocumentation.readthedocs.io/en/latest/HSL_SeqDailyTools.html#CopyPlatePattern96ToTipRack"
+    },
+    "details": {
+      "function": {
+        "name": "CopyPlatePattern96ToTipRack",
+        "description": "Copies the sequence pattern on a 96 well plate and applies it to a tip rack. It is used to ensure that the 96 head only picks up tips in the wells that the plate is going to be interacting with.",
+        "parameters": [
+          {
+            "name": "plateSource",
+            "type": "Sequence",
+            "description": "The sequence pattern on the plate to be copied"
+          },
+          {
+            "name": "tipRack",
+            "type": "Sequence",
+            "description": "The sequence of the tip rack which will have the template applied to it"
+          }
+        ],
+        "return": {
+          "type": "None"
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "metadata": {
+      "title": "CopyPlatePatternToPlate",
+      "description": "Copies the pattern of wells from one plate to another plate",
+      "tags": [
+        "function"
+      ],
+      "documentation_url": "https://venuslibrarydocumentation.readthedocs.io/en/latest/HSL_SeqDailyTools.html#CopyPlatePatternToPlate"
+    },
+    "details": {
+      "function": {
+        "name": "CopyPlatePatternToPlate",
+        "description": "Copies the pattern of wells from one plate to another plate",
+        "parameters": [
+          {
+            "name": "plateSource",
+            "type": "Sequence",
+            "description": "The sequence pattern from the plate to be copied"
+          },
+          {
+            "name": "plateTarget",
+            "type": "Sequence",
+            "description": "The sequence of the second plate which is having the template applied to it"
+          }
+        ],
+        "return": {
+          "type": "None"
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "metadata": {
+      "title": "GetNumberOfPositionsLeft",
+      "description": "Calculates the number of positions left in a sequence",
+      "tags": [
+        "function"
+      ],
+      "documentation_url": "https://venuslibrarydocumentation.readthedocs.io/en/latest/HSL_SeqDailyTools.html#GetNumberOfPositionsLeft"
+    },
+    "details": {
+      "function": {
+        "name": "GetNumberOfPositionsLeft",
+        "description": "Calculates the number of positions left in a sequence",
+        "parameters": [
+          {
+            "name": "seq",
+            "type": "Sequence",
+            "description": "The sequence which is being checked"
+          },
+          {
+            "name": "numberOfPositionsLeft",
+            "type": "Integer",
+            "description": "The output value of how many positions are left in the sequence"
+          }
+        ],
+        "return": {
+          "type": "None"
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "metadata": {
+      "title": "SeqEasyEdit",
+      "description": "A simplified version of SeqEdit, with only the parameters which are regularly used",
+      "tags": [
+        "function"
+      ],
+      "documentation_url": "https://venuslibrarydocumentation.readthedocs.io/en/latest/HSL_SeqDailyTools.html#SeqEasyEdit"
+    },
+    "details": {
+      "function": {
+        "name": "SeqEasyEdit",
+        "description": "A simplified version of SeqEdit, with only the parameters that are regularly used. It opens a dialog box from which the user can edit whichever sequence is specified in the input.",
+        "parameters": [
+          {
+            "name": "seq",
+            "type": "Sequence",
+            "description": "The sequence which is being edited"
+          },
+          {
+            "name": "timeout",
+            "type": "Integer",
+            "description": "How long the dialog window will stay open by itself before closing and continuing the method without editing the sequence (in seconds)"
+          },
+          {
+            "name": "dialog_title",
+            "type": "String",
+            "description": "The title of the dialog window which pops up"
+          },
+          {
+            "name": "dialog_message",
+            "type": "String",
+            "description": "The text within the dialog window which pops up"
+          },
+          {
+            "name": "ML_STAR",
+            "type": "Device",
+            "description": "The device used. Should be ML_STAR from the dropdown"
+          }
+        ],
+        "return": {
+          "type": "None"
+        }
+      }
+    }
+  }
+]

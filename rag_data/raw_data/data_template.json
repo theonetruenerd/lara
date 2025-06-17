@@ -1,0 +1,66 @@
+{
+  "type": "entry_type",  // Examples: "library", "function", "best_practice", "error_handling"
+  "metadata": {
+    "title": "Title of the entry",   // Name or topic of the entry
+    "description": "Detailed description of what this entry covers",
+    "tags": ["tag1", "tag2"],       // List of tags for categorization
+    "version": "1.0.0",             // Version or applicable version for libraries/functions
+    "author": "Author/organization name",
+    "documentation_url": "http://example.com",  // Optional, for references or official docs
+    "last_updated": "YYYY-MM-DD"   // Last date this entry was updated
+  },
+  "details": {
+    // For libraries
+    "library": {
+      "name": "Library name",
+      "url": "http://library-url.example.com",
+      "description": "Overview of the library",
+      "dependencies": ["dependency1", "dependency2"],    // Optional list of dependencies
+      "functions": ["function1", "function2"]            // Optional list of associated functions
+    },
+
+    // For functions
+    "function": {
+      "name": "Function name",
+      "description": "What the function does and its purpose",
+      "parameters": [
+        {
+          "name": "Parameter name",
+          "type": "Parameter type (e.g., String, Integer, Sequence)",
+          "required": true,  // True or false
+          "description": "Description of what this parameter represents"
+        }
+      ],
+      "return": {
+        "type": "Return type (e.g., String, Integer, None)",
+        "description": "What is returned by the function"
+      },
+      "usage_examples": [
+        {
+          "input": "Example input or code snippet",
+          "output": "Expected output or behavior"
+        }
+      ]
+    },
+
+    // For best practices
+    "best_practices": [
+      {
+        "title": "Practice title",
+        "category": "Practice category (e.g., Lab Organization, Coding Standards)",
+        "details": "Description of the best practice",
+        "associated_tools": ["tool1", "tool2"]  // Tools or libraries tied to this practice
+      }
+    ],
+
+    // For error handling
+    "error_handling": [
+      {
+        "error_code": "Error code or identifier",
+        "description": "Explanation of what the error means and underlying cause",
+        "user_action": "Steps for the user to resolve the issue",
+        "developer_action": "Steps for developers to fix/troubleshoot programmatically"
+      }
+    ]
+  }
+}
