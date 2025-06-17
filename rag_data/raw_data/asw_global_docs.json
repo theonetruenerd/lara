@@ -1,0 +1,20 @@
+[
+  {
+    "type": "library",
+    "metadata": {
+      "title": "ASWGlobal",
+      "description": "The ASWGlobal library doesn't introduce any functions, but instead declares common HSL Constants used in other libraries, submethods, functions and dialogues.",
+      "tags": [
+        "library"
+      ],
+      "documentation_url": "https://venuslibrarydocumentation.readthedocs.io/en/latest/ASWGlobal.html"
+    },
+    "details": {
+      "library": {
+        "name": "ASWGlobal",
+        "url": "https://github.com/theonetruenerd/VenusPackages/blob/main/ASWGlobal.pkg",
+        "description": "The ASWGlobal library doesn't introduce any functions, but instead declares common HSL Constants used in other libraries, submethods, functions and dialogues. It sets False, No, and Off to all be hslFalse. It sets True, Yes and On to hslTrue. For dialogue buttons, it sets: 1 = OK, 2 = Cancel, 3 = Abort, 4 = Retry, 5 = Ignore, 6 = Yes, 7 = No. Clicking STOP on a timer returns a 3."
+      }
+    }
+  }
+]

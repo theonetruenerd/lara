@@ -1,0 +1,443 @@
+[
+  {
+  "type": "error_handling",
+  "metadata": {
+    "title": "Venus Error Codes and Explanations",
+    "description": "Comprehensive explanations and resolutions for runtime errors encountered in Venus and HSLUtilLib libraries.",
+    "tags": ["runtime_errors", "Venus", "error_handling"],
+    "documentation_url": "https://venuslibrarydocumentation.readthedocs.io/en/latest/RuntimeErrors.html#runtime-errors"
+  },
+  "details": {
+    "error_handling": [
+      {
+        "error_code": "0xa0220001",
+        "error_title": "No memory",
+        "description": "The system cannot allocate or access enough memory or disk space for the given operation.",
+        "user_action": "Close other RAM-intensive programs, increase Venus's allocated memory, or assign higher CPU priority in Task Manager.",
+        "developer_action": "Optimize the method's memory usage and review memory allocation in the program."
+      },
+      {
+        "error_code": "0xa1230002",
+        "error_title": "Inserting identifier failed",
+        "description": "The parser or executor could not insert the specified identifier into the symbol table. One way this can happen is if the symbol table corrupts.",
+        "user_action": "Replace the identifier temporarily to determine whether the identifier or table is the source of the issue. Check to make sure the identifier has all the required data associated with it (e.g. name, type, and attributes). Check to make sure the identifier doesn't include any symbols that might interfere with the parser. These can include anything outside of standard ASCII characters from range 0xa0 to 0x7F."
+      },
+      {
+        "error_code": "0xa1230003",
+        "error_title": "Identifier not found",
+        "description": "This error means that the parser or executer could not find the specified identifier in the symbol table. This usually means something like a sequence or variable has either not been added or has been added but misspelt.",
+        "user_action": "Check the trace to see the name of what it is failing to find. Check whether the name in the error is spelled correctly. If it is spelled correctly, ensure that it has been correctly initialised and defined during the method.",
+        "developer_action": "Ensure the correct symbol table is being called during the method."
+      },
+            {
+        "error_code": "0xa2230004",
+        "error_title": "L-value not a number",
+        "description": "The left-hand side of the expression at the specified line is not a number. This issue usually arises when adding two values, and one is a string instead of a number.",
+        "user_action": "1. Verify whether the operation is addition (two numbers) or string concatenation.\n2. If adding values, ensure the L-value is a valid number by converting strings using `StrFVal` if necessary.\n3. If concatenating strings, convert numbers to strings using `StrFStr` before the operation.",
+        "developer_action": "Check and ensure the L-value's data type matches the desired operation and performs type conversions if needed."
+      },
+      {
+        "error_code": "0xa2230005",
+        "error_title": "R-value not a number",
+        "description": "The right-hand side (R-value) of the expression at the specified line is not a number. This commonly happens when a numeric operation involves a string.",
+        "user_action": "1. Check whether you are adding numbers or concatenating strings.\n2. For addition, convert the R-value to a numeric type using `StrFVal` if it's a string.\n3. For concatenation, ensure the R-value is treated as a string using `StrFStr`.",
+        "developer_action": "Ensure the type of the R-value matches the desired operation, performing any necessary conversions."
+      },
+      {
+        "error_code": "0xa1230006",
+        "error_title": "Not an identifier",
+        "description": "The symbol table entry is not recognized as an identifier. This usually occurs due to an invalid entry or misspelling.",
+        "user_action": "1. Review the symbol name and correct any spelling errors.\n2. Ensure the symbol has been correctly added to the symbol table and initialized in the necessary scope.",
+        "developer_action": "Validate symbol entries when creating or modifying them in the symbol table and flag invalid identifiers."
+      },
+      {
+        "error_code": "0xa1220007",
+        "error_title": "Unrecognized token",
+        "description": "The executor encountered an unrecognized token, often due to invalid characters or an unsupported input format.",
+        "user_action": "1. Locate any unsupported characters in the specified line. Avoid using characters outside ASCII range (0x20 - 0x7F).\n2. Add escape characters (e.g., `\\`) to special characters where needed.\n3. Replace or remove invalid characters entirely.",
+        "developer_action": "Refine validation checks to identify and handle erroneous tokens appropriately before they pass to the executor."
+      },
+      {
+        "error_code": "0xa1230008",
+        "error_title": "R-value not bound",
+        "description": "The R-value in the expression lacks a valid assignment. It may be uninitialized or improperly defined.",
+        "user_action": "1. Confirm that the R-value is assigned a value before being used in operations.\n2. Verify the variable type using utilities like `CheckValueType` or `StrGetType`.\n3. Add logic to initialize variables and ensure they contain valid values.",
+        "developer_action": "Audit variable initialization procedures and verify that all variables entering an expression are assigned valid data."
+      },
+      {
+        "error_code": "0xa1230009",
+        "error_title": "Bad number",
+        "description": "An invalid numeric value was encountered. This often involves improperly formatted numbers (e.g., float instead of int).",
+        "user_action": "1. Identify the specific value causing the error.\n2. Verify that the value matches the expected numeric type (e.g., int or float) with functions like `IsInteger` or `IsFloat`.\n3. Change the format by converting between numbers using appropriate methods.",
+        "developer_action": "Establish robust error handling for numeric type mismatches in arithmetic expressions."
+      },
+      {
+        "error_code": "0xa123000a",
+        "error_title": "Bad tree",
+        "description": "The syntax tree structure is invalid or corrupted, causing the executor to fail at parsing or execution.",
+        "user_action": "1. Analyze the problematic block of code and check for missing or mismatched syntax elements.\n2. Correct and rebuild the affected syntax tree structure.",
+        "developer_action": "Improve tree construction logic and validation mechanisms to prevent structural errors during processing."
+      },
+      {
+        "error_code": "0xa123000b",
+        "error_title": "Invalid entry",
+        "description": "An invalid entry in the symbol table was detected. It often involves non-ASCII characters or corrupted data.",
+        "user_action": "1. Identify the problematic entries in the symbol table and correct or replace non-ASCII characters with ASCII equivalents.\n2. Trace the source of invalid entries and update or sanitize them programmatically.",
+        "developer_action": "Enhance the symbol table validation process to identify and reject invalid entries early."
+      },
+      {
+        "error_code": "0xa122000c",
+        "error_title": "Function identifier is protected",
+        "description": "A protected function identifier is being accessed or used improperly in the current scope.",
+        "user_action": "Ensure no attempts are made to override, re-declare, or misuse identifiers marked as 'protected'.",
+        "developer_action": "Safeguard protected identifiers at runtime and issue appropriate warnings on misuse."
+      },
+      {
+        "error_code": "0xa223000d",
+        "error_title": "Underspecified function parameters",
+        "description": "The function call does not provide enough parameters to satisfy the function definition.",
+        "user_action": "1. Confirm the expected parameter count for the function by checking the method or documentation.\n2. Add missing parameters to match the expected function signature.",
+        "developer_action": "Enforce parameter count requirements during compilation or execution."
+      },
+      {
+        "error_code": "0xa2230037",
+        "error_title": "Overspecified function parameters",
+        "description": "Too many parameters were passed to a function, exceeding the defined input requirements.",
+        "user_action": "1. Review the function signature and ensure no unnecessary arguments are passed.\n2. Remove extra parameters from the function call.",
+        "developer_action": "Introduce safeguards to flag and reject calls with excess parameters at runtime or compilation."
+      },
+      {
+        "error_code": "0xa123000e",
+        "error_title": "Setting value failed",
+        "description": "The executor failed to set the value of a symbol table entry at the specified line.",
+        "user_action": "1. Identify the line causing the issue and locate the problem in Venus code.\n2. Check the value being set to the symbol table and ensure it has valid attributes with no special characters.",
+        "developer_action": "Inspect the symbol table entry where the value is being assigned. Verify its type and compatibility."
+      },
+      {
+        "error_code": "0xa123000f",
+        "error_title": "Function identifier not found",
+        "description": "The executor failed to locate a function identifier in the symbol table at the specified line. This may occur if the function is not defined, improperly imported, or misspelled.",
+        "user_action": "1. Check the function name in the error and ensure it is spelled correctly.\n2. Verify that the function is properly defined and imported into the symbol table ahead of its usage.\n3. Determine if the issue occurs every time the function is called or only at specific times due to naming or exporting issues.",
+        "developer_action": "Validate function identifiers during the import process and ensure they are in the correct namespace."
+      },
+      {
+        "error_code": "0xa1230010",
+        "error_title": "Bindings not found",
+        "description": "The executor could not locate bindings for a formal parameter in the symbol table.",
+        "user_action": "Verify that all necessary bindings for the function parameters exist and are part of the symbol table before execution.",
+        "developer_action": "Check and trace bindings for formal parameters at runtime and log any missing associations."
+      },
+      {
+        "error_code": "0xa1230011",
+        "error_title": "Temporary variable not found",
+        "description": "The executor failed to delete the identifier of a temporary variable in the symbol table.",
+        "user_action": "Identify the specified temporary variable and ensure it exists before deletion.",
+        "developer_action": "Optimize handling of temporary variables to ensure they are properly stored and referenced before deletion."
+      },
+      {
+        "error_code": "0xa1230012",
+        "error_title": "Unknown function type",
+        "description": "The executor found a function at the specific line that has not been defined.",
+        "user_action": "1. Pinpoint the offending function using the code line provided in the error.\n2. Ensure the function name is spelled correctly and defined ahead of its usage.\n3. Confirm that the function is not defined post-call, and adjust if necessary.",
+        "developer_action": "Implement error handling for undefined functions and validate their availability or pre-loading during execution."
+      },
+      {
+        "error_code": "0xa2230013",
+        "error_title": "Unable to find file",
+        "description": "The executor could not locate the specified file.",
+        "user_action": "1. Ensure the file path is correct and the file exists at the specified location.\n2. Check for computer-specific paths if methods have been ported across systems.\n3. Verify that the file has not been moved or renamed, and ensure that Venus has access permissions.",
+        "developer_action": "Improve file validation logic to detect missing or inaccessible paths proactively."
+      },
+      {
+        "error_code": "0xa1230014",
+        "error_title": "Type mismatch",
+        "description": "A mismatch occurred between the variable type provided and the type expected in a function parameter.",
+        "user_action": "1. Check the function causing the error.\n2. Verify the expected input type for the function and ensure the provided variable matches this type.\n3. Use type-conversion functions if necessary to align input types with the function requirements.",
+        "developer_action": "Ensure runtime validation for type mismatches and provide detailed feedback for incorrect input."
+      },
+      {
+        "error_code": "0xa2230015",
+        "error_title": "Bad L-value",
+        "description": "The left-hand side value of an operation is not valid for the referenced operation.",
+        "user_action": "1. Verify the type of the L-value and ensure it matches the operation's expectation (e.g., array, integer, float).\n2. Check for operator mismatches (e.g., `+` vs `&`) and validate data type compatibility.",
+        "developer_action": "Introduce strong input validation for L-values in mathematical or assignment-related operations."
+      },
+      {
+        "error_code": "0xa2230016",
+        "error_title": "Bad R-value",
+        "description": "The right-hand side value of an operation is incompatible with the operation being performed.",
+        "user_action": "1. Confirm the expected type of the R-value for the operator being used.\n2. Ensure the R-value has been initialized correctly and matches the desired format.\n3. Adjust types if necessary using type-conversion utilities for float, int, or other requirements.",
+        "developer_action": "Improve type validation for R-values and handle exceptions for unexpected types."
+      },
+      {
+        "error_code": "0xa2220017",
+        "error_title": "Unrecognized type",
+        "description": "The executor encountered an unrecognized storage type at the specified line.",
+        "user_action": "Verify the variables in the offending line to ensure they use valid storage types compatible with Venus.",
+        "developer_action": "Expand handling and validation logic for type recognition within storage constraints."
+      },
+      {
+        "error_code": "0xa1230018",
+        "error_title": "Bad memory type",
+        "description": "The executor detected an invalid memory type for an array at the specified line.",
+        "user_action": "Confirm that arrays are being allocated with valid memory types and are initialized correctly.",
+        "developer_action": "Inspect array initialization logic to ensure proper bounds and memory constraints are respected."
+      },
+      {
+        "error_code": "0xa1230019",
+        "error_title": "Array reference out of bounds",
+        "description": "An invalid index was used for an array reference.",
+        "user_action": "1. Confirm the size of the array and ensure the specified index is within valid bounds.\n2. Add runtime checks for dynamically calculated indices and adjust the array accordingly to avoid out-of-bound errors.",
+        "developer_action": "Strengthen checks for array referencing and ensure index calculations are safeguarded."
+      },
+      {
+        "error_code": "0xa123001a",
+        "error_title": "Bad array identifier type",
+        "description": "An array identifier at the specified line used an unsupported or invalid storage type.",
+        "user_action": "Verify the storage type of the array and ensure compliance with supported Venus types.",
+        "developer_action": "Add validation for array identifiers to prevent corruption or unsupported types from being processed."
+      },
+      {
+        "error_code": "0xa123001b",
+        "error_title": "Tag insert failed",
+        "description": "The executor failed to insert an identifier into the tag table at the specified line.",
+        "user_action": "Verify the identifier being added to the tag table and ensure its type is valid and compatible.",
+        "developer_action": "Enhance tag insertion operations to handle invalid identifiers gracefully."
+      },
+      {
+        "error_code": "0xa123001c",
+        "error_title": "Dynamic memory identifier not bound",
+        "description": "The dynamic memory object identifier at the specified line is not bound to a valid value. This often indicates incorrect runtime allocation.",
+        "user_action": "1. Locate the dynamic memory object causing the error.\n2. Confirm the expected type and ensure that assignments align with the identifier.\n3. Rectify problematic HSL code where applicable, or replace it with method editor operations.",
+        "developer_action": "Ensure dynamic memory allocation is handled systematically during runtime to avoid unbound objects."
+      },
+      {
+        "error_code": "0xa123001d",
+        "error_title": "Tag identifier not bound",
+        "description": "An identifier for a structure tag object was not bound to a valid value at the specified line.",
+        "user_action": "1. Identify the variable linked to the tag and ensure the tag is declared and assigned properly in the method editor.\n2. Validate the declaration of the tag via HSL code if required.",
+        "developer_action": "Improve structure tag validations to ensure declarations and assignments are properly handled."
+      },
+      {
+        "error_code": "0xa123001e",
+        "error_title": "Structure reference out of bounds",
+        "description": "The executor detected a reference to an element of a structure that is outside the allowed range. Examples include accessing integers too large or strings that are too long.",
+        "user_action": "1. Identify the out-of-bounds reference by checking the specific line in the HSL code.\n2. Locate the bounds of the identifier in the HSL code, often defined in 'struct' functions, to adjust them as needed.\n3. Adjust the reference bounds to include the target value or modify the logic to ensure the reference stays in range (e.g., split or truncate strings, use loops for valid integers).",
+        "developer_action": "Check and refine structure bounds validation in code and ensure references remain within allowable limits."
+      },
+      {
+        "error_code": "0xa123001f",
+        "error_title": "Bad tag identifier type",
+        "description": "The identifier of a structure tag object has been assigned an incorrect type (e.g., string assigned instead of an integer).",
+        "user_action": "1. Identify the tag causing the issue from the trace file.\n2. Confirm the expected type for the tag from the HSL code.\n3. Correct the type mismatch:\n   - If string rather than int, enclose the assignment in quotes.\n   - If int rather than string, remove quotes or convert string to int.\n   - Use functions from `HSLExtensions:Core` library to correct between int, float, or string.",
+        "developer_action": "Add stricter validation for tag identifier types during assignment and runtime execution."
+      },
+      {
+        "error_code": "0xa1230020",
+        "error_title": "L-value is not a structure identifier",
+        "description": "The executor detected a data reference at the specified line that is not a structure on the left-hand side of the assignment.",
+        "user_action": "Check the data reference in the offending line and ensure it represents a valid structure identifier.",
+        "developer_action": "Add validation logic to confirm L-values represent structures during assignment."
+      },
+      {
+        "error_code": "0xa1230021",
+        "error_title": "L-value is not an array identifier",
+        "description": "The executor detected a data reference at the specified line that is not an array on the left-hand side of the assignment.",
+        "user_action": "Ensure the data reference in the L-value is a valid array identifier of the correct type.",
+        "developer_action": "Strengthen type checking to verify that any L-value used in this context is initialized as an array."
+      },
+      {
+        "error_code": "0xa1230022",
+        "error_title": "Failed to lookup tag identifier in the tag table",
+        "description": "The executor could not find a tag identifier in the tag table.",
+        "user_action": "1. Check for spelling errors in the tag name.\n2. Ensure the tag has been correctly added to the tag table.\n3. Use an existing tag already present in the tag table.",
+        "developer_action": "Improve logic for adding and validating tag identifiers in the tag table."
+      },
+      {
+        "error_code": "0xa1230023",
+        "error_title": "Signal break",
+        "description": "This error occurs when the executor detects an invalid break statement at the specified line"
+      },
+      {
+        "error_code": "0xa1230024",
+        "error_title": "Copy out of bound",
+        "description": "This error occurs when the executor detects a structure copy which is out of bound"
+      },
+      {
+        "error_code": "0xa1230025",
+        "error_title": "Signal return",
+        "description": "This error occurs when the executor detects an invalid return statement"
+      },
+      {
+        "error_code": "0xa2230026",
+        "error_title": "Array size is not an integer",
+        "description": "An error occurred because the array size is invalid, often assigned as a float or a string instead of an integer.",
+        "user_action": "1. Verify where the array size was assigned in the code.\n2. Check if calculations (e.g., division) incorrectly assigned a float value even when integers were expected.\n3. Ensure variables are written as integers, not strings.\n4. Use type-conversion functions if needed (e.g., convert float to integer).\n5. Make sure array sizes are positive or dynamically adjust array size when items are added.",
+        "developer_action": "Optimize array size validation logic to explicitly check for integer types during initialization or assignment."
+      },
+      {
+        "error_code": "0xa1230027",
+        "error_title": "Failed to copy tag table",
+        "description": "This error occurs when the executor fails to copy the tag table"
+      },
+      {
+        "error_code": "0xa1230029",
+        "error_title": "Function has not been defined",
+        "description": "The specified function has not been defined in the library being called from.",
+        "user_action": "1. If you are the library author, ensure the function is defined and not commented out, misspelled, or only accessible in one namespace.\n2. If you are not the library author but know HSL, copy the library and edit the definition to address the issue.\n3. If neither option is possible, remove the function call and design an alternative solution.",
+        "developer_action": "Implement error handling for undefined functions in libraries and ensure namespace and accessibility consistency."
+      },
+      {
+        "error_code": "0xa123002a",
+        "error_title": "Unable to enter nesting level",
+        "description": "This error occurs when the executor failed to enter the nesting level at the specified line."
+      },
+      {
+        "error_code": "0xa123002b",
+        "error_title": "Unable to exit nesting level",
+        "description": "This error occurs when the executor failed to exit the nesting level at the specified line."
+      },
+      {
+        "error_code": "0xa122002c",
+        "error_title": "No context",
+        "description": "This error occurs when the executor fails to create a new symbol table at the specified line."
+      },
+      {
+        "error_code": "0xa123002d",
+        "error_title": "Failed to read file",
+        "description": "This error occurs when the executor fails to read a specific file. This may be caused by an incorrect file path, a missing file, a hidden file attribute, or restricted access permissions.",
+        "user_action": "1. Verify that the specified file path is correct and valid.\n2. Ensure the file exists at the specified location.\n3. Check if the file has a hidden attribute and remove it if necessary. You can manage this dynamically using the File Handling library or manually using File Explorer.\n4. Confirm that the file is stored in a location where Venus has the required access permissions.",
+        "developer_action": "Implement enhanced error handling to validate file paths, check file existence before operation, and handle file permissions or hidden attributes gracefully."
+      },
+      {
+        "error_code": "0xa123002e",
+        "error_title": "Failed to create timer",
+        "description": "This error occurs when the executor or parser fails to create a timer at the specified line"
+      },
+      {
+        "error_code": "0xa123002f",
+        "error_title": "Failed to set timer",
+        "description": "This error occurs when the executor fails to set a timer at the specified line"
+      },
+      {
+        "error_code": "0xa1230030",
+        "error_title": "Failed to wait timer",
+        "description": "This error occurs when the executor fails to wait for at timer to be signaled at the specified line"
+      },
+      {
+        "error_code": "0xa1230031",
+        "error_title": "Failed to create event",
+        "description": "This error occurs when the parser or executor fails to create an event at the specified line"
+      },
+      {
+        "error_code": "0xa1230032",
+        "error_title": "Failed to set event",
+        "description": "This error occurs when the executor fails to set an event at the specified line"
+      },
+      {
+        "error_code": "0xa1230033",
+        "error_title": "Failed to wait event",
+        "description": "This error occurs when the executor fails to wait for an event to be signaled"
+      },
+      {
+        "error_code": "0xa1230034",
+        "error_title": "Bad argument",
+        "description": "The executor detected an error in a function argument at the specified line. An example would be providing a non-integer value as input to a File:Set Position command, which only accepts integers.",
+        "user_action": "1. Determine the specific line and function causing the error from the trace file.\n2. Verify the expected argument type for the function (e.g., `int`, `str`, or `var`).\n3. Ensure the argument meets any bounds or constraints defined in the documentation (e.g., max 300uL volume for 300uL tips).\n4. Use HSLMthLib to convert variables to the required type (e.g., float-to-int or string-to-int).",
+        "developer_action": "Implement argument type validation and bounds checking in functions to emit more descriptive error messages."
+      },
+      {
+        "error_code": "0xa2230035",
+        "error_title": "Syntax error",
+        "description": "The parser detected invalid syntax in the method.",
+        "user_action": "1. Review the HSL code or method at the line specified in the error.\n2. Correct syntax errors using the language documentation to ensure compliance.",
+        "developer_action": "Enhance error reporting for syntax errors to assist developers in quickly diagnosing and correcting them."
+      },
+      {
+        "error_code": "0xa2230036",
+        "error_title": "Integer divide by zero",
+        "description": "The executor detected an integer divide-by-zero error at a specified line.",
+        "user_action": "1. Identify which variable or constant is zero in the division operation.\n2. Verify that variables involved in the division are properly initialized and not defaulting to zero.\n3. Correct instances where the variable might be misspelled, causing the default value to be zero.",
+        "developer_action": "Introduce checks before division operations to prevent divide-by-zero errors."
+      },
+      {
+        "error_code": "0xa2230038",
+        "error_title": "Returning address of local variable or temporary",
+        "description": "The executor detected that a function is returning the address of a local or temporary variable, which becomes invalid once the function returns.",
+        "user_action": "1. Convert the variable being returned to a global or task-local variable instead.\n2. If the return value is not essential, consider removing the function return statement.",
+        "developer_action": "Warn against returning local or temporary variables from functions, and ensure proper handling of variable scope."
+      },
+      {
+        "error_code": "0xa2230039",
+        "error_title": "Library requires installer",
+        "description": "A required installer for a library has not been run. An example is the Dynamic Liquid Classes library.",
+        "user_action": "1. Contact your Hamilton apps specialist or the author of the library (usually noted in the HSL file).\n2. Locate and run the required installer to configure the library.",
+        "developer_action": "Embed checks in the library to verify if the installer has run and provide actionable error messages."
+      },
+      {
+        "error_code": "0xa223003a",
+        "error_title": "Unable to find file",
+        "description": "The executor could not find the specified file at the specified line.",
+        "user_action": "1. Check if the file is hidden and unhide it if necessary.\n2. Ensure the file exists and the file path is valid, with the correct backslashes (`\\\\`).\n3. Verify that the file is located in a directory the executor has permission to access.",
+        "developer_action": "Improve error handling for file access by validating paths and testing file existence before execution."
+      },
+      {
+        "error_code": "0xa223003b",
+        "error_title": "File not updatable",
+        "description": "The executor attempted to update a file marked as non-updatable.",
+        "user_action": "1. Remove the read-only tag from the file, either manually via File Explorer or dynamically using the File Handling library.\n2. Ensure the file is in a directory writable by the executor.\n3. Confirm that the file is not being used by another program or open elsewhere.",
+        "developer_action": "Handle non-writable files gracefully by providing descriptive error messages and suggestions to adjust permissions."
+      },
+      {
+        "error_code": "0xa223003c",
+        "error_title": "Recursive call",
+        "description": "The executor detected a recursive or concurrent function call, which is unsupported in the given context.",
+        "user_action": "1. If the function is from an HSL library, replace it with an alternative method or update the library if proficient in HSL.\n2. Adjust function or recursion parameters to prevent infinite recursion.\n3. For concurrent calls resulting from forks, modify the design to use sequential execution by including 'wait for event' steps.",
+        "developer_action": "Add runtime checks to safely handle recursion or concurrency and warn developers where such errors might occur."
+      },
+      {
+        "error_code": "0xa223003d",
+        "error_title": "Failed to wait for thread(s)",
+        "description": "The executor failed to wait for one or more threads to complete.",
+        "user_action": "Ensure synchronization is properly handled within the affected code, using proper thread signaling mechanisms.",
+        "developer_action": "Enhance thread management logic to handle cases where threads fail to notify or complete as expected."
+      },
+      {
+        "error_code": "0xa223003e",
+        "error_title": "Time-out interval elapsed",
+        "description": "The time-out window for a specific function or user interaction elapsed without response.",
+        "user_action": "1. Ensure the user is available at the STAR during timeout events.\n2. Increase the timeout interval for dialog windows or set it to 'infinite' (usually by specifying a timeout value of 0).",
+        "developer_action": "Optimize timeout mechanisms to provide dynamic or configurable time intervals suited to each use case."
+      },
+      {
+        "error_code": "0xa2220044",
+        "error_title": "Automation type not supported",
+        "description": "The executor encountered an unsupported automation function parameter.",
+        "user_action": "Verify the automation function in use and confirm that all its parameters are supported by the executor implementation.",
+        "developer_action": "Improve parsing logic to provide more specific error messages about unsupported parameters."
+      },
+      {
+        "error_code": "0xa1230046",
+        "error_title": "Bad argument parameter",
+        "description": "The executor detected an invalid function argument.",
+        "user_action": "1. Identify the specific argument causing the issue.\n2. Confirm that the argument matches the required type (e.g., `int` vs `str`).\n3. Ensure the argument is not misspelled if it references a variable.\n4. Double-check that the intended function is being called.",
+        "developer_action": "Improve runtime validation to detect and describe errors in argument parameters more precisely."
+      },
+      {
+        "error_code": "0xa123004d",
+        "error_title": "Sequence property not found",
+        "description": "A sequence property referenced in the method could not be located.",
+        "user_action": "1. If the sequence is defined in the layout file, verify or edit the sequence properties within the layout.\n2. If the sequence is defined in the method, ensure that the defining step exists and is executed before the property is referenced.\n3. Confirm that the sequence reference is spelled correctly and not commented out.",
+        "developer_action": "Improve error reporting for sequence properties to include potential causes and location within the layout or method files."
+      },
+      {
+        "error_code": "0xa123004e",
+        "error_title": "Int64 not supported",
+        "description": "The executor encountered a 64-bit integer, which is unsupported on specific platforms.",
+        "user_action": "1. Move off platforms that do not support 64-bit integers (e.g., Windows 2000).\n2. Convert the integer to a 32-bit representation, if possible.",
+        "developer_action": "Ensure the platform supports 64-bit integers or restrict functionalities requiring larger integer formats."
+      }
+    ]
+  }
+}
+]

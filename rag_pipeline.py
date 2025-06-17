@@ -4,6 +4,7 @@ from sentence_transformers import SentenceTransformer, util
 import torch
 import json
 from openai import OpenAI
+import numpy as np
 
 client = OpenAI(
   base_url="https://openrouter.ai/api/v1",
@@ -37,43 +38,71 @@ class RAGChatbot:
 
     def retrieve_context(self, query: str, top_k: int = 5):
         """
-        Retrieves the top-k relevant context snippets based on user query.
+        Retrieves the top-k relevant context snippets (metadata) based on the user's query.
         :param query: User query string.
-        :param top_k: Number of relevant snippets to retrieve.
+        :param top_k: Number of relevant metadata snippets to retrieve.
         """
-        # Ensure that the index contains both documents and embeddings
-        if "documents" not in self.index or "embeddings" not in self.index:
-            raise ValueError("Index must contain both 'documents' and 'embeddings'.")
 
-        docs = self.index["documents"]
-        embeddings = self.index["embeddings"]
+        # The index is expected to be a list of objects directly
+        data = self.index  # Assuming the index is a list of JSON objects
+        if not isinstance(data, list) or not data:
+            raise ValueError("Index must be a non-empty list of JSON objects.")
 
-        # Ensure embeddings and docs have the same length
-        if len(docs) != len(embeddings):
-            raise ValueError(
-                f"Mismatch between number of documents ({len(docs)}) "
-                f"and embeddings ({len(embeddings)})."
+        # Extract metadata and embeddings, validating the structure
+        metadata_list = []
+        embeddings = []
+
+        for entry in data:
+            # Verify that each entry contains the expected keys
+            if not isinstance(entry, dict) or "id" not in entry or "metadata" not in entry or "embedding" not in entry:
+                raise ValueError("Each index entry must contain 'id', 'metadata', and 'embedding' keys.")
+
+            metadata = entry["metadata"]
+            embedding = entry["embedding"]
+
+            # Ensure `metadata` is a dictionary containing required fields
+            if not isinstance(metadata, dict) or "title" not in metadata or "description" not in metadata:
+                raise ValueError("Each 'metadata' must contain at least 'title' and 'description' keys.")
+
+            # Extract metadata fields
+            metadata_content = (
+                f"Title: {metadata.get('title', 'No Title')}\n"
+                f"Description: {metadata.get('description', 'No Description')}\n"
+                f"Tags: {', '.join(metadata.get('tags', []))}\n"
+                f"Documentation URL: {metadata.get('documentation_url', 'No URL')}"
             )
+            metadata_list.append(metadata_content)
 
-        # Handle empty documents list
-        if not docs:
-            return []
+            # Validate embedding structure
+            if not isinstance(embedding, list) or not all(isinstance(x, (int, float)) for x in embedding):
+                raise ValueError("'embedding' must be a list of numeric values.")
 
-        # Encode the query
+            embeddings.append(embedding)
+
+        # Convert embeddings to tensor
+        embeddings_tensor = torch.tensor(embeddings, dtype=torch.float)
+
+        # Ensure embeddings is a non-empty 2D tensor
+        if embeddings_tensor.size(0) == 0 or embeddings_tensor.dim() != 2:
+            raise ValueError("Embeddings must be a non-empty 2D array.")
+
+        # Encode the query into the same format as the embeddings
         query_embedding = embedding_model.encode(query, convert_to_tensor=True)
-        doc_embeddings = torch.tensor(embeddings)
+        if isinstance(query_embedding, np.ndarray):  # Compatibility check
+            query_embedding = torch.tensor(query_embedding, dtype=torch.float)
 
-        # Handle case where top_k is greater than the number of documents
-        effective_k = min(top_k, len(docs))
+        # Handle case where top_k exceeds the number of available documents
+        effective_k = min(top_k, len(metadata_list))
 
         # Calculate similarity scores
-        similarities = util.pytorch_cos_sim(query_embedding, doc_embeddings)[0]
+        similarities = util.pytorch_cos_sim(query_embedding, embeddings_tensor)[0]
         top_results = torch.topk(similarities, k=effective_k)
 
-        # Collect results
+        # Collect results with metadata and similarity scores
         results = []
         for score, idx in zip(top_results[0], top_results[1]):
-            results.append((docs[idx], float(score)))
+            results.append((metadata_list[idx], float(score)))
+
         return results
 
     def generate_response(self, query: str, context: str):

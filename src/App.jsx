@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import './App.css'
 
 function App() {
@@ -61,8 +62,13 @@ function App() {
             key={message.id}
             className={`message ${message.isUser ? 'user-message' : 'bot-message'}`}
           >
-            {message.text}
-          </div>
+            {message.isUser ? (
+                 message.text
+               ) : (
+                 /* Use ReactMarkdown to render Markdown content */
+                 <ReactMarkdown>{message.text}</ReactMarkdown>
+               )}
+             </div>
         ))}
         {isLoading && (
           <div className="message bot-message loading">

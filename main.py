@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-chatbot = RAGChatbot("rag_data\\raw_data\\hsl_seq_daily_tools_docs_with_embeddings.json")
+chatbot = RAGChatbot("rag_data\\hamilton_processed.json")
 
 class ChatRequest(BaseModel):
     message: str
